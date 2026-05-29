@@ -51,8 +51,9 @@ CRITICAL RULES:
 2. Once a specialist has run, move on — do NOT repeat it.
 3. Route CustomerCommsCrew exactly once, then FINISH immediately after.
 
-For multi-domain questions (e.g. "outage + SLA credit"):
-  route NetworkAnalytics first, then PolicyRAG, then CustomerCommsCrew.
+MULTI-DOMAIN QUESTIONS — run EVERY relevant specialist before CustomerCommsCrew:
+- "outage + SLA credit / am I eligible": NetworkAnalytics (outage facts) AND PolicyRAG (SLA policy rules), then CustomerCommsCrew. Eligibility cannot be answered without the policy, so PolicyRAG is REQUIRED here.
+- Do not draft the customer response until the policy AND data needed to answer are both in context.
 
 Current accumulated context:
 {agent_context}
@@ -60,6 +61,21 @@ Current accumulated context:
 
 
 SPECIALISTS = {"PolicyRAG", "NetworkAnalytics", "NetworkDiagnosticsADK", "BillingResolutionADK"}
+
+
+def _required_specialists(query: str) -> set[str]:
+    """Specialists a correct answer demands, regardless of what the LLM router picks.
+
+    Guards multi-domain inquiries (e.g. "outage + SLA credit") where the router tends
+    to stop after one specialist and skip the policy/data the answer actually needs.
+    """
+    q = query.lower()
+    required: set[str] = set()
+    if any(k in q for k in ("sla", "eligible", "eligibility", "policy", "roaming", "upgrade")):
+        required.add("PolicyRAG")
+    if any(k in q for k in ("outage", "outages", "latency", "packet loss", "throughput")):
+        required.add("NetworkAnalytics")
+    return required
 
 
 def _supervisor_node(state: AgentState) -> AgentState:
@@ -72,6 +88,13 @@ def _supervisor_node(state: AgentState) -> AgentState:
     if already_run & SPECIALISTS and not (SPECIALISTS - already_run):
         # All 4 specialists ran, CustomerCommsCrew hasn't → force it
         return {"next": "CustomerCommsCrew"}
+
+    # Force any specialist the answer requires before the comms crew drafts a reply
+    missing_required = _required_specialists(state["user_query"]) - already_run
+    if missing_required:
+        for worker in ("NetworkAnalytics", "PolicyRAG"):
+            if worker in missing_required:
+                return {"next": worker}
 
     llm = ChatOpenAI(
         model="gpt-4o-mini",
@@ -96,6 +119,10 @@ def _supervisor_node(state: AgentState) -> AgentState:
     if chosen in already_run:
         # LLM tried to repeat — if specialists have run, go to CustomerCommsCrew, else FINISH
         chosen = "CustomerCommsCrew" if (already_run & SPECIALISTS) else "FINISH"
+
+    # Never FINISH before CustomerCommsCrew has drafted the customer response.
+    if chosen == "FINISH" and "CustomerCommsCrew" not in already_run:
+        chosen = "CustomerCommsCrew"
 
     return {"next": chosen}
 

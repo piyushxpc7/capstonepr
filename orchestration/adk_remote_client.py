@@ -60,6 +60,28 @@ async def _call_adk_agent(base_url: str, query: str, agent_label: str) -> str:
     return final_text or f"[{agent_label}] No response received."
 
 
+def _run_async(coro) -> str:
+    """Run an async coroutine in a fresh thread to avoid conflicts with any running event loop."""
+    import threading
+
+    result_holder: dict = {}
+
+    def target():
+        try:
+            result_holder["value"] = asyncio.run(coro)
+        except Exception as e:
+            result_holder["error"] = e
+
+    t = threading.Thread(target=target)
+    t.start()
+    t.join(timeout=120)
+    if t.is_alive():
+        return "Timed out waiting for ADK agent response."
+    if "error" in result_holder:
+        raise result_holder["error"]
+    return result_holder.get("value", "No response.")
+
+
 def call_network_diagnostics_adk(query: str) -> str:
     """Call the Network Diagnostics ADK agent on port 8001."""
     if not _is_service_up(NETWORK_ADK_URL):
@@ -68,7 +90,7 @@ def call_network_diagnostics_adk(query: str) -> str:
             "Start with: python adk-services/network_diagnostics/agent.py"
         )
     try:
-        return asyncio.run(_call_adk_agent(NETWORK_ADK_URL, query, "NetworkDiagnosticsADK"))
+        return _run_async(_call_adk_agent(NETWORK_ADK_URL, query, "NetworkDiagnosticsADK"))
     except Exception as e:
         return f"[NetworkDiagnosticsADK] Error: {e}"
 
@@ -81,6 +103,6 @@ def call_billing_resolution_adk(query: str) -> str:
             "Start with: python adk-services/billing_resolution/agent.py"
         )
     try:
-        return asyncio.run(_call_adk_agent(BILLING_ADK_URL, query, "BillingResolutionADK"))
+        return _run_async(_call_adk_agent(BILLING_ADK_URL, query, "BillingResolutionADK"))
     except Exception as e:
         return f"[BillingResolutionADK] Error: {e}"
