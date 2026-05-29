@@ -1,0 +1,45 @@
+Prodapt - Billing Disputes and Adjustments Policy
+
+1. DISPUTE WINDOW
+Customers must report billing errors within 90 days of the statement date.
+Disputes submitted after 90 days may be reviewed at Prodapt discretion but are
+not guaranteed adjustment.
+
+2. VALID DISPUTE CATEGORIES
+Eligible for investigation and potential credit:
+- Duplicate charges for the same service period
+- Charges for services not activated or already cancelled
+- Incorrect plan tier applied after documented plan change
+- Roaming charges when Travel Pass was active (requires proof of activation timestamp)
+- Equipment charges after verified return with RMA number
+- Taxes calculated on incorrect address
+
+NOT eligible for automatic credit:
+- Usage overages when usage logs confirm consumption
+- Late payment fees when payment was received after due date
+- Promotional pricing expiration (customers notified 30 days prior)
+- Third-party content purchases (app store, premium SMS)
+
+3. INVESTIGATION TIMELINE
+- Standard disputes: resolution within 10 business days
+- Complex disputes involving partner carriers: up to 30 business days
+- During investigation, disputed amount may be placed on hold (not sent to collections)
+
+4. CREDIT LIMITS
+Automatic credits without manager approval: up to $50 per incident
+Supervisor approval required: $50.01 - $200
+Director approval required: above $200
+
+5. REQUIRED DOCUMENTATION
+For roaming disputes: travel dates, destination, Travel Pass activation screenshot
+For duplicate charges: statement showing both charges with transaction IDs
+For cancellation disputes: cancellation confirmation number and date
+
+6. PAYMENT DURING DISPUTE
+Customers must pay undisputed portions of the bill by the due date to avoid late fees.
+Disputed amounts on hold do not accrue late fees.
+
+7. ESCALATION PATH
+Tier 1 Billing Support -> Billing Resolution Team -> Ombudsman (for amounts >$500)
+
+Contact Billing Resolution: 1-800-BILL-HELP or billing.disputes@prodapt.com

@@ -1,0 +1,47 @@
+Prodapt - International Roaming Policy
+Last Updated: March 2026
+
+OVERVIEW
+Prodapt offers international roaming in 180+ countries through partner networks.
+Roaming charges and data speeds vary by destination zone and your home plan tier.
+
+ROAMING ZONES
+Zone A (Canada, Mexico): Included at no extra charge on Unlimited Plus and Business Pro plans.
+  Data usage counts against your domestic allowance at 1:1 ratio.
+
+Zone B (Western Europe, UK, Japan, South Korea, Australia):
+  - Unlimited Plus: 10 GB/month included, then $10/GB
+  - Standard Unlimited: $0.25/min voice, $0.10/SMS, $12/GB data
+  - Business Pro: 25 GB/month included
+
+Zone C (Latin America excluding Mexico, Eastern Europe, Middle East, Africa):
+  - All plans: $0.35/min voice, $0.15/SMS, $15/GB data
+  - Travel Pass available: $10/day for 500 MB high-speed data + unlimited low-speed
+
+Zone D (Rest of World including remote islands):
+  - Pay-as-you-go only: $1.50/min voice, $0.50/SMS, $20/GB data
+  - Travel Pass not available in Zone D countries
+
+TRAVEL PASS ACTIVATION
+Enable Travel Pass before departure via:
+- Prodapt mobile app > Settings > International Roaming
+- SMS "TRAVEL ON" to 611
+- Customer portal at my.prodapt.com
+
+Travel Pass activates on first network registration abroad and charges one daily fee
+per 24-hour period in the local time zone of the visited country.
+
+DATA ROAMING SAFEGUARDS
+All accounts have a default $100/month roaming spend cap. Customers may raise or lower
+this cap in the app. When 80% of the cap is reached, SMS and email alerts are sent.
+
+DEVICE COMPATIBILITY
+Your device must support the frequency bands used in your destination. Prodapt
+recommends checking band compatibility at prodapt.com/roaming-check before travel.
+5G roaming is available in Zone A and B countries on select flagship devices only.
+
+BILLING DISPUTES FOR ROAMING
+Roaming charges appear on the bill cycle when usage occurred, not when you returned home.
+Dispute roaming charges within 60 days by providing travel dates and destination.
+
+Support: roaming@prodapt.com | While abroad dial +1-404-555-0199 (free from Prodapt SIM)

@@ -1,0 +1,7 @@
+.env
+venv/
+__pycache__/
+*.pyc
+data/vector_index/
+data/telecom_ops.db
+.DS_Store

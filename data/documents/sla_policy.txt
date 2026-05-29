@@ -1,0 +1,37 @@
+Prodapt - Service Level Agreement (SLA) Policy
+Version 3.2 | Effective January 2026
+
+1. NETWORK AVAILABILITY COMMITMENT
+Prodapt guarantees 99.5% network uptime for postpaid business and enterprise customers
+on our 4G LTE and 5G NR networks. Consumer prepaid plans are covered at 99.0% uptime.
+
+2. OUTAGE CREDIT ELIGIBILITY
+Customers may receive a service credit when a verified network outage exceeds:
+- 4 consecutive hours for business plans (credit: one day of monthly service fee)
+- 8 consecutive hours for consumer plans (credit: 50% of one day of service fee)
+Credits are applied automatically within two billing cycles when the outage is logged in our
+Network Operations Center (NOC) system with severity HIGH or CRITICAL.
+
+3. MEAN TIME TO REPAIR (MTTR)
+- CRITICAL outages (complete regional loss): target restoration within 4 hours
+- HIGH severity (degraded service >50% customers in a cell sector): target 8 hours
+- MEDIUM severity (localized tower issues): target 24 hours
+
+4. EXCLUSIONS
+SLA credits do not apply for outages caused by:
+- Customer device failure or misconfiguration
+- Scheduled maintenance announced 72 hours in advance
+- Force majeure events (hurricanes, earthquakes, civil unrest)
+- Third-party backhaul provider failures beyond Prodapt control
+
+5. PERFORMANCE METRICS
+Business customers may request quarterly reports showing:
+- Average latency (target: <40ms on 5G, <60ms on LTE)
+- Packet loss (target: <0.5%)
+- Jitter (target: <15ms)
+
+6. ESCALATION
+If an outage exceeds MTTR targets, enterprise customers may escalate to their assigned
+Customer Success Manager. Reference your account number and the NOC incident ID.
+
+Contact: sla@prodapt.com | NOC Hotline: 1-800-NOC-HELP

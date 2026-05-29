@@ -1,0 +1,42 @@
+Prodapt - 5G Network FAQ
+
+Q: What is 5G and how is it different from 4G LTE?
+A: 5G (Fifth Generation) is our newest wireless technology offering significantly faster
+download speeds (up to 1 Gbps in ideal conditions), lower latency (as low as 10ms), and
+better support for many connected devices. 4G LTE typically delivers 25-100 Mbps with
+40-60ms latency. 5G uses both mid-band (C-band) and mmWave spectrum depending on your location.
+
+Q: Do I need a new phone for 5G?
+A: Yes. Your device must support 5G NR bands n77 and n260 used by Prodapt. Compatible
+devices include iPhone 12 and newer, Samsung Galaxy S21 and newer, Google Pixel 6 and newer.
+Check compatibility at prodapt.com/5g-devices.
+
+Q: Why does my 5G icon show but speeds feel slow?
+A: The 5G icon indicates connection to a 5G cell, but speed depends on:
+- Distance from tower and line-of-sight (mmWave requires near-tower proximity)
+- Network congestion during peak hours (6-10 PM)
+- Your plan's speed tier (Standard Unlimited caps 5G at 250 Mbps; Unlimited Plus is uncapped)
+- Indoor penetration (5G mid-band penetrates buildings better than mmWave)
+
+Q: What areas have 5G coverage?
+A: Prodapt 5G covers 280+ metro areas. Rural 5G expansion continues through 2027.
+Use the coverage map at prodapt.com/coverage. 5G Ultra (mmWave) is available in
+stadiums, airports, and dense urban zones in 45 cities.
+
+Q: Does 5G use more battery?
+A: 5G can use 10-20% more battery than LTE in weak signal areas because the phone
+searches for optimal cells. Enable "Smart Data Mode" in settings to auto-switch to LTE
+when 5G signal is weak.
+
+Q: Is 5G safe?
+A: Prodapt 5G operates within FCC exposure limits. Our towers comply with IEEE and
+WHO guidelines for radio frequency emissions. Public health information at prodapt.com/5g-safety.
+
+Q: Troubleshooting dropped 5G calls or data:
+1. Toggle Airplane Mode for 10 seconds
+2. Reset network settings (Settings > General > Reset > Reset Network Settings)
+3. Update carrier settings when prompted
+4. If issue persists at a specific location, report tower ID from Field Test Mode (*3001#12345#*)
+   to support for tower-specific investigation.
+
+Support: 1-800-5G-HELP | Live chat in Prodapt app

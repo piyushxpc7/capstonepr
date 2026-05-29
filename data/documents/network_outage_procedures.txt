@@ -1,0 +1,44 @@
+Prodapt - Network Outage Response Procedures
+Internal Reference Document (Customer-Facing Summary)
+
+INCIDENT CLASSIFICATION
+CRITICAL: Complete loss of service affecting >10,000 subscribers or entire metro region
+HIGH: Significant degradation affecting 1,000-10,000 subscribers or multiple towers
+MEDIUM: Single tower or sector outage affecting <1,000 subscribers
+LOW: Performance degradation without complete service loss
+
+INITIAL RESPONSE CHECKLIST
+1. NOC validates alarm from monitoring system (SNMP traps, customer reports, social media)
+2. Assign incident commander and open ticket in ServiceNow (INC prefix)
+3. Identify affected towers by region, technology (LTE/5G), and estimated customer count
+4. Notify regional field teams and activate backup power assessment for affected sites
+5. Post initial status to status.prodapt.com within 30 minutes of confirmed outage
+
+COMMON ROOT CAUSES
+- Fiber backhaul cut (construction, vehicle accident): 35% of CRITICAL incidents
+- Power outage at tower site without functioning generator: 25%
+- RAN software bug after patch deployment: 15%
+- Weather (lightning, ice loading on antennas): 15%
+- Equipment hardware failure (RRU, baseband unit): 10%
+
+CUSTOMER COMMUNICATION TEMPLATES
+CRITICAL outage: SMS blast to affected ZIP codes within 1 hour
+"We are aware of a service disruption in [REGION]. Our teams are working to restore
+service. Updates at status.prodapt.com/inc/[INC_ID]"
+
+RESTORATION VERIFICATION
+Before closing incident:
+- Run drive tests in affected area
+- Confirm tower status = OPERATIONAL in NOC dashboard
+- Verify customer complaint volume returns to baseline
+- Document root cause and preventive actions in post-incident review
+
+PREVENTIVE MAINTENANCE
+- Generator fuel level checks: monthly at all sites
+- Battery backup tests: quarterly
+- Software patch staging: 5% canary deployment before full rollout
+- Fiber route inspections: semi-annual in high-risk construction zones
+
+CUSTOMER IMPACT ESTIMATION
+Use formula: affected_subscribers = sum(sector_capacity * outage_duration_hours)
+for SLA credit calculations. Refer to sla_policy.txt for credit eligibility rules.
