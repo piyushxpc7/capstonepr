@@ -109,3 +109,30 @@ CREATE TABLE IF NOT EXISTS billing_disputes (
     FOREIGN KEY (customer_id) REFERENCES customer_subscriptions(customer_id),
     FOREIGN KEY (charge_id) REFERENCES billing_charges(charge_id)
 );
+
+-- ---------------------------------------------------------------------------
+-- Conversation history (ChatGPT-like conversation management)
+-- ---------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS conversations (
+    conversation_id       TEXT PRIMARY KEY,
+    title                 TEXT,
+    created_at            TEXT NOT NULL,
+    updated_at            TEXT NOT NULL,
+    follow_up_count       INTEGER DEFAULT 0,
+    is_active             INTEGER DEFAULT 1
+);
+
+CREATE TABLE IF NOT EXISTS conversation_messages (
+    message_id            INTEGER PRIMARY KEY AUTOINCREMENT,
+    conversation_id       TEXT NOT NULL,
+    role                  TEXT NOT NULL,  -- 'user' or 'assistant'
+    content               TEXT NOT NULL,
+    final_response        TEXT,  -- full response from AI (for assistant only)
+    execution_trace       TEXT,  -- JSON string of execution trace (for assistant only)
+    created_at            TEXT NOT NULL,
+    FOREIGN KEY (conversation_id) REFERENCES conversations(conversation_id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_conversation_messages_conv_id
+ON conversation_messages(conversation_id);

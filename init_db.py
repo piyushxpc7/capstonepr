@@ -16,6 +16,8 @@ TABLES = [
     "billing_charges",
     "billing_credits",
     "billing_disputes",
+    "conversations",
+    "conversation_messages",
 ]
 
 

@@ -136,7 +136,7 @@ def _policy_rag_node(state: AgentState) -> AgentState:
 
     result = query_policy(state["user_query"])
     context_entry = f"\n[PolicyRAG]\n{result}"
-    trace_entry = {"worker": "PolicyRAG", "output": result[:500]}
+    trace_entry = {"worker": "PolicyRAG", "output": result}
     return {
         "agent_context": state.get("agent_context", "") + context_entry,
         "execution_trace": state.get("execution_trace", []) + [trace_entry],
@@ -150,7 +150,7 @@ def _network_analytics_node(state: AgentState) -> AgentState:
 
     result = query_sql(state["user_query"])
     context_entry = f"\n[NetworkAnalytics]\n{result}"
-    trace_entry = {"worker": "NetworkAnalytics", "output": result[:500]}
+    trace_entry = {"worker": "NetworkAnalytics", "output": result}
     return {
         "agent_context": state.get("agent_context", "") + context_entry,
         "execution_trace": state.get("execution_trace", []) + [trace_entry],
@@ -164,7 +164,7 @@ def _network_diagnostics_adk_node(state: AgentState) -> AgentState:
 
     result = call_network_diagnostics_adk(state["user_query"])
     context_entry = f"\n[NetworkDiagnosticsADK]\n{result}"
-    trace_entry = {"worker": "NetworkDiagnosticsADK", "output": result[:500]}
+    trace_entry = {"worker": "NetworkDiagnosticsADK", "output": result}
     return {
         "agent_context": state.get("agent_context", "") + context_entry,
         "execution_trace": state.get("execution_trace", []) + [trace_entry],
@@ -178,7 +178,7 @@ def _billing_resolution_adk_node(state: AgentState) -> AgentState:
 
     result = call_billing_resolution_adk(state["user_query"])
     context_entry = f"\n[BillingResolutionADK]\n{result}"
-    trace_entry = {"worker": "BillingResolutionADK", "output": result[:500]}
+    trace_entry = {"worker": "BillingResolutionADK", "output": result}
     return {
         "agent_context": state.get("agent_context", "") + context_entry,
         "execution_trace": state.get("execution_trace", []) + [trace_entry],
@@ -195,7 +195,7 @@ def _customer_comms_crew_node(state: AgentState) -> AgentState:
         agent_context=state.get("agent_context", ""),
     )
     context_entry = f"\n[CustomerCommsCrew]\n{result}"
-    trace_entry = {"worker": "CustomerCommsCrew", "output": result[:500]}
+    trace_entry = {"worker": "CustomerCommsCrew", "output": result}
     return {
         "agent_context": state.get("agent_context", "") + context_entry,
         "execution_trace": state.get("execution_trace", []) + [trace_entry],
@@ -254,13 +254,31 @@ def _get_app():
 
 def run_telecom_assistant(user_query: str) -> dict:
     """Invoke the LangGraph supervisor loop and return structured results for the UI."""
+    return run_telecom_assistant_with_context(user_query, conversation_context="")
+
+
+def run_telecom_assistant_with_context(user_query: str, conversation_context: str = "") -> dict:
+    """Invoke the LangGraph supervisor loop with multi-turn conversation context.
+
+    Args:
+        user_query: The current user message
+        conversation_context: Prior conversation history as "User: msg\nAssistant: response\n..."
+
+    Returns:
+        dict with final_response, execution_trace, and agent_context
+    """
     app = _get_app()
+
+    # Prepend conversation context to the agent's context awareness
+    initial_context = ""
+    if conversation_context.strip():
+        initial_context = f"[Previous Conversation]\n{conversation_context}\n"
 
     initial_state: AgentState = {
         "messages": [HumanMessage(content=user_query)],
         "next": "",
         "user_query": user_query,
-        "agent_context": "",
+        "agent_context": initial_context,
         "execution_trace": [],
         "final_response": "",
     }
