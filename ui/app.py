@@ -282,11 +282,13 @@ st.divider()
 placeholder = (
     "Ask a follow-up..." if messages else "Type your question here..."
 )
+if "input_nonce" not in st.session_state:
+    st.session_state["input_nonce"] = 0
 user_input = st.text_input(
     "Your message:",
     placeholder=placeholder,
     disabled=at_max,
-    key="user_message_input",
+    key=f"user_message_input_{st.session_state['input_nonce']}",
 )
 
 submit = st.button(
@@ -335,8 +337,10 @@ if submit and user_input.strip():
                 execution_trace=result.get("execution_trace", [])
             )
 
-            st.session_state["user_message_input"] = ""
+            st.session_state["input_nonce"] += 1
             st.rerun()
 
+        except BrokenPipeError as e:
+            st.error(f"Error: Connection lost while processing (Errno 32 Broken pipe)\n\nThis usually means a backend service disconnected. Try:\n1. Refresh the page\n2. Check that all ADK services are running in separate terminals\n3. Check your internet connection")
         except Exception as e:
-            st.error(f"Error: {e}")
+            st.error(f"Error: {type(e).__name__}: {e}")

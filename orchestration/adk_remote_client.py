@@ -19,67 +19,81 @@ def _is_service_up(base_url: str) -> bool:
 
 async def _call_adk_agent(base_url: str, query: str, agent_label: str) -> str:
     """Send a message to a remote ADK A2A agent and return the final text response."""
-    from google.adk.agents.remote_a2a_agent import RemoteA2aAgent
-    from google.adk.runners import Runner
-    from google.adk.sessions import InMemorySessionService
-    from google.genai import types
+    try:
+        from google.adk.agents.remote_a2a_agent import RemoteA2aAgent
+        from google.adk.runners import Runner
+        from google.adk.sessions import InMemorySessionService
+        from google.genai import types
 
-    session_service = InMemorySessionService()
-    remote = RemoteA2aAgent(
-        name=agent_label,
-        agent_card=f"{base_url}/.well-known/agent-card.json",
-    )
-    runner = Runner(
-        agent=remote,
-        session_service=session_service,
-        app_name=agent_label,
-    )
+        session_service = InMemorySessionService()
+        remote = RemoteA2aAgent(
+            name=agent_label,
+            agent_card=f"{base_url}/.well-known/agent-card.json",
+        )
+        runner = Runner(
+            agent=remote,
+            session_service=session_service,
+            app_name=agent_label,
+        )
 
-    user_id = "langgraph_user"
-    session_id = uuid.uuid4().hex
-    await session_service.create_session(
-        app_name=agent_label, user_id=user_id, session_id=session_id
-    )
+        user_id = "langgraph_user"
+        session_id = uuid.uuid4().hex
+        await session_service.create_session(
+            app_name=agent_label, user_id=user_id, session_id=session_id
+        )
 
-    new_message = types.Content(
-        role="user",
-        parts=[types.Part(text=query)],
-    )
+        new_message = types.Content(
+            role="user",
+            parts=[types.Part(text=query)],
+        )
 
-    final_text = ""
-    async for event in runner.run_async(
-        user_id=user_id,
-        session_id=session_id,
-        new_message=new_message,
-    ):
-        if event.is_final_response() and event.content and event.content.parts:
-            for part in event.content.parts:
-                if hasattr(part, "text") and part.text:
-                    final_text += part.text
+        final_text = ""
+        async for event in runner.run_async(
+            user_id=user_id,
+            session_id=session_id,
+            new_message=new_message,
+        ):
+            if event.is_final_response() and event.content and event.content.parts:
+                for part in event.content.parts:
+                    if hasattr(part, "text") and part.text:
+                        final_text += part.text
 
-    return final_text or f"[{agent_label}] No response received."
+        return final_text or f"[{agent_label}] No response received."
+    except BrokenPipeError as e:
+        return f"[{agent_label}] Broken pipe error (connection closed): {e}"
+    except Exception as e:
+        return f"[{agent_label}] Error: {type(e).__name__}: {e}"
 
 
 def _run_async(coro) -> str:
     """Run an async coroutine in a fresh thread to avoid conflicts with any running event loop."""
     import threading
+    import signal
 
     result_holder: dict = {}
 
     def target():
         try:
-            result_holder["value"] = asyncio.run(coro)
+            # Create a new event loop for this thread
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            try:
+                result_holder["value"] = loop.run_until_complete(coro)
+            finally:
+                loop.close()
+        except BrokenPipeError as e:
+            result_holder["error"] = BrokenPipeError(f"Connection closed during ADK request: {e}")
         except Exception as e:
             result_holder["error"] = e
 
-    t = threading.Thread(target=target)
+    t = threading.Thread(target=target, daemon=False)
     t.start()
     t.join(timeout=120)
     if t.is_alive():
-        return "Timed out waiting for ADK agent response."
+        return "[ADK] Timed out waiting for ADK agent response."
     if "error" in result_holder:
         raise result_holder["error"]
-    return result_holder.get("value", "No response.")
+    return result_holder.get("value", "[ADK] No response.")
 
 
 def call_network_diagnostics_adk(query: str) -> str:

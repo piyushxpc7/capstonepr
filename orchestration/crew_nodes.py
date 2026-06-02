@@ -84,5 +84,10 @@ def run_customer_comms_crew(user_query: str, agent_context: str) -> str:
         verbose=False,
     )
 
-    result = crew.kickoff()
-    return str(result)
+    try:
+        result = crew.kickoff()
+        return str(result)
+    except BrokenPipeError as e:
+        return f"[CustomerCommsCrew] Broken pipe error (connection closed): {e}"
+    except Exception as e:
+        return f"[CustomerCommsCrew] Error: {type(e).__name__}: {e}"

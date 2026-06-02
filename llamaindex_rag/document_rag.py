@@ -43,7 +43,15 @@ def _build_or_load_index():
 
 def query_policy(question: str) -> str:
     """Query the policy document RAG and return a synthesized answer."""
-    index = _build_or_load_index()
-    engine = index.as_query_engine(similarity_top_k=3)
-    response = engine.query(question)
-    return str(response)
+    try:
+        index = _build_or_load_index()
+        engine = index.as_query_engine(similarity_top_k=3)
+        response = engine.query(question)
+        return str(response)
+    except BrokenPipeError as e:
+        return f"[PolicyRAG] Connection error - the embedding or LLM service disconnected. Try again."
+    except TimeoutError as e:
+        return f"[PolicyRAG] Request timed out - the LLM service took too long to respond."
+    except Exception as e:
+        error_msg = str(e)[:100] if str(e) else type(e).__name__
+        return f"[PolicyRAG] Error: {error_msg}"

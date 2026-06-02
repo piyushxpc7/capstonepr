@@ -96,6 +96,14 @@ def _build_query_engine():
 
 def query_sql(question: str) -> str:
     """Run a natural language query against telecom_ops.db using semantic table selection."""
-    qe = _build_query_engine()
-    response = qe.query(question)
-    return str(response)
+    try:
+        qe = _build_query_engine()
+        response = qe.query(question)
+        return str(response)
+    except BrokenPipeError as e:
+        return f"[NetworkAnalytics] Connection error - the embedding or LLM service disconnected. Try again."
+    except TimeoutError as e:
+        return f"[NetworkAnalytics] Request timed out - the LLM service took too long to respond."
+    except Exception as e:
+        error_msg = str(e)[:100] if str(e) else type(e).__name__
+        return f"[NetworkAnalytics] Error: {error_msg}"
